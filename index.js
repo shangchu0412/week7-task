@@ -154,9 +154,12 @@ const isInt = (inputField) => {
       text: "請輸入整數",
       icon: "error",
       confirmButtonColor: "#3085d6",
-      confirmButtonText: "確認"
+      confirmButtonText: "確認",
+      didClose: ()=>{
+        inputField.value = "";
+        inputField.focus();
+      }
     });
-    inputField.value = "";
   }
 }
 
