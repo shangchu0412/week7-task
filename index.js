@@ -53,7 +53,7 @@ const regionSearch = document.querySelector('.regionSearch');
 const cantFind = document.querySelector('.cantFind-area');
 
 //篩選選項切換
-function regionSearchFilter(){
+function regionSearchFilter() {
   regionSearch.addEventListener('change', function (e) {
     const filterData = data.filter((item) => {
       if (e.target.value === item.area) {
@@ -112,8 +112,8 @@ function chartData(data) {
       width: 12,
     },
     size: {
-      width:200,
-      height:200
+      width: 200,
+      height: 200
     }
   });
 }
@@ -132,11 +132,11 @@ const addBtn = document.querySelector('.addTicket-btn')
 
 //監聽星級有無在區間內
 ticketRate.addEventListener('input', function () {
-  const rateValue = parseInt(ticketRate.value);
-  if (isNaN(rateValue) || rateValue < 1 || rateValue > 10) {
+  const rateValue = Number(ticketRate.value);
+  if (isNaN(rateValue) || rateValue < 1 || rateValue > 10 ||!Number.isInteger(rateValue)) {
     Swal.fire({
       title: "輸入錯誤",
-      text: "請輸入1到10之間的數字",
+      text: "請輸入1到10之間的整數",
       icon: "error",
       confirmButtonColor: "#3085d6",
       confirmButtonText: "確認"
@@ -144,6 +144,7 @@ ticketRate.addEventListener('input', function () {
     ticketRate.value = "";
   }
 })
+
 
 //監聽有無填寫
 const inputElements = form.querySelectorAll('input,select, textarea')
@@ -199,7 +200,7 @@ addBtn.addEventListener('click', function (e) {
       showConfirmButton: false,
       timer: 1500
     });
-    regionSearch.value="";
+    regionSearch.value = "";
     regionSearchFilter()
   }
 });
