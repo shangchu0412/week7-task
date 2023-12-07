@@ -161,12 +161,12 @@ const isInt = (inputField) => {
 }
 
 //監聽金額輸入是否為整數
-ticketPrice.addEventListener('input', ()=>{
+ticketPrice.addEventListener('input', () => {
   isInt(ticketPrice);
 });
 
 //監聽組數輸入是否為整數
-ticketNum.addEventListener('input', ()=>{
+ticketNum.addEventListener('input', () => {
   isInt(ticketNum);
 });
 
@@ -188,11 +188,17 @@ inputElements.forEach((item, index) => {
 //新增套票
 addBtn.addEventListener('click', function (e) {
   e.preventDefault();
+
+  //判斷是否有輸入內容
+  let firstEmptyField = null;
   if (ticketName.value === '' || ticketImgUrl.value === '' || ticketRegion.value === '' || ticketDescription.value === '' || ticketNum.value === '' || ticketPrice.value === '' || ticketRate.value === '') {
     inputElements.forEach((item, index) => {
       const message = messages[index];
       if (item.value.trim() === '') {
         message.style.display = 'block';
+        if (!firstEmptyField) {
+          firstEmptyField = item;
+        }
       } else {
         message.style.display = 'none';
       }
@@ -202,30 +208,54 @@ addBtn.addEventListener('click', function (e) {
       text: "還有資料尚未輸入",
       icon: "info",
       confirmButtonColor: "#3085d6",
-      confirmButtonText: "確認"
-    });
+      confirmButtonText: "確認",
+      didClose: () => {
+        firstEmptyField.focus();
+      }
+    })
+
   } else {
-    let str = {};
-    str.id = data.length;
-    str.name = ticketName.value.trim();
-    str.imgUrl = ticketImgUrl.value.trim();
-    str.area = ticketRegion.value;
-    str.description = ticketDescription.value.trim();
-    str.group = parseInt(ticketNum.value);
-    str.price = parseInt(ticketPrice.value);
-    str.rate = parseInt(ticketRate.value);
-    data.push(str);
-    init(data);
-    form.reset();
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: "success",
-      title: "新增成功",
-      showConfirmButton: false,
-      timer: 1500
-    });
-    regionSearch.value = "";
-    regionSearchFilter()
+    //判斷圖片是否加載成功
+    const img = new Image();
+    img.src = ticketImgUrl.value.trim();
+    img.onerror = function (e) {
+      e.preventDefault();
+      Swal.fire({
+        title: "圖片載入失敗",
+        text: "請確認圖片連結是否正確",
+        icon: "error",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "確認",
+        didClose: () => {
+          ticketImgUrl.focus();
+          ticketImgUrl.value = "";
+        }
+      });
+    };
+    //加載成功，新增套票內容
+    img.onload = function (e) {
+      let str = {};
+      str.id = data.length;
+      str.name = ticketName.value.trim();
+      str.imgUrl = ticketImgUrl.value.trim();
+      str.area = ticketRegion.value;
+      str.description = ticketDescription.value.trim();
+      str.group = parseInt(ticketNum.value);
+      str.price = parseInt(ticketPrice.value);
+      str.rate = parseInt(ticketRate.value);
+      data.push(str);
+      init(data);
+      form.reset();
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "新增成功",
+        showConfirmButton: false,
+        timer: 1500
+      });
+      regionSearch.value = "";
+      regionSearchFilter()
+    }
   }
 });
