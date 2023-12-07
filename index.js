@@ -53,16 +53,19 @@ const regionSearch = document.querySelector('.regionSearch');
 const cantFind = document.querySelector('.cantFind-area');
 
 //篩選選項切換
-regionSearch.addEventListener('change', function (e) {
-  const filterData = data.filter((item) => {
-    if (e.target.value === item.area) {
-      return item
-    } else if (e.target.value === "") {
-      return item
-    }
+function regionSearchFilter(){
+  regionSearch.addEventListener('change', function (e) {
+    const filterData = data.filter((item) => {
+      if (e.target.value === item.area) {
+        return item
+      } else if (e.target.value === "") {
+        return item
+      }
+    })
+    init(filterData);
   })
-  init(filterData);
-})
+}
+regionSearchFilter();
 
 //圖表
 function chartData(data) {
@@ -178,13 +181,13 @@ addBtn.addEventListener('click', function (e) {
   } else {
     let str = {};
     str.id = data.length;
-    str.name = ticketName.value;
-    str.imgUrl = ticketImgUrl.value;
+    str.name = ticketName.value.trim();
+    str.imgUrl = ticketImgUrl.value.trim();
     str.area = ticketRegion.value;
-    str.description = ticketDescription.value;
-    str.group = ticketNum.value;
-    str.price = ticketPrice.value;
-    str.rate = ticketRate.value;
+    str.description = ticketDescription.value.trim();
+    str.group = parseInt(ticketNum.value);
+    str.price = parseInt(ticketPrice.value);
+    str.rate = parseInt(ticketRate.value);
     data.push(str);
     init(data);
     form.reset();
@@ -196,5 +199,7 @@ addBtn.addEventListener('click', function (e) {
       showConfirmButton: false,
       timer: 1500
     });
+    regionSearch.value="";
+    regionSearchFilter()
   }
 });
