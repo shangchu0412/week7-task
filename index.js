@@ -133,7 +133,7 @@ const addBtn = document.querySelector('.addTicket-btn')
 //監聽星級有無在區間內
 ticketRate.addEventListener('input', function () {
   const rateValue = Number(ticketRate.value);
-  if (isNaN(rateValue) || rateValue < 1 || rateValue > 10 ||!Number.isInteger(rateValue)) {
+  if (isNaN(rateValue) || rateValue < 1 || rateValue > 10 || !Number.isInteger(rateValue)) {
     Swal.fire({
       title: "輸入錯誤",
       text: "請輸入1到10之間的整數",
@@ -144,6 +144,31 @@ ticketRate.addEventListener('input', function () {
     ticketRate.value = "";
   }
 })
+
+//判斷輸入是否為整數函示
+const isInt = (inputField) => {
+  const result = Number.isInteger(Number(inputField.value));
+  if (!result) {
+    Swal.fire({
+      title: "輸入錯誤",
+      text: "請輸入整數",
+      icon: "error",
+      confirmButtonColor: "#3085d6",
+      confirmButtonText: "確認"
+    });
+    inputField.value = "";
+  }
+}
+
+//監聽金額輸入是否為整數
+ticketPrice.addEventListener('input', ()=>{
+  isInt(ticketPrice);
+});
+
+//監聽組數輸入是否為整數
+ticketNum.addEventListener('input', ()=>{
+  isInt(ticketNum);
+});
 
 
 //監聽有無填寫
