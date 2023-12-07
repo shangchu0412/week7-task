@@ -65,30 +65,40 @@ regionSearch.addEventListener('change', function (e) {
 })
 
 //圖表
-function chartData(data){
+function chartData(data) {
+  //統整資料
   let total = {};
-  data.forEach((item)=>{
-    if(total[item.area] === undefined){
+  data.forEach((item) => {
+    if (total[item.area] === undefined) {
       total[item.area] = 1;
-    }else{
+    } else {
       total[item.area] += 1;
     }
   })
+  //取出屬性轉成陣列
   const areaAry = Object.keys(total);
+  //自定義排序
+  const areaSpecify = ["台北", "台中", "高雄"];
+  areaAry.sort((a, b) => {
+    return areaSpecify.indexOf(a) - areaSpecify.indexOf(b);
+  });
+
+  //轉換成陣列包陣列
   let aryChart = [];
-  areaAry.forEach((item)=>{
-    console.log(item);
-    aryChart.push([item,total[item]])
+  areaAry.forEach((item) => {
+    aryChart.push([item, total[item]])
   })
+
+  //載入圖表
   const chart = c3.generate({
     bindto: '#chart',
     data: {
       columns: aryChart,
       type: "donut",
       colors: {
-        "台北":"#26C0C7",
-        "台中":"#5151D3",
-        "高雄":"#E68618"
+        "台北": "#26C0C7",
+        "台中": "#5151D3",
+        "高雄": "#E68618"
       }
     },
     donut: {
@@ -96,7 +106,11 @@ function chartData(data){
       label: {
         show: false
       },
-      width: 30,
+      width: 12,
+    },
+    size: {
+      width:200,
+      height:200
     }
   });
 }
